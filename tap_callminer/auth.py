@@ -2,7 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
+from typing_extensions import override
+
+if TYPE_CHECKING:
+    from tap_callminer.client import CallMinerStream
 
 
 # The SingletonMeta metaclass makes your streams reuse the same authenticator instance.
@@ -10,35 +16,26 @@ from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 class CallMinerAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
     """Authenticator class for CallMiner."""
 
+    @override
     @property
-    def oauth_request_body(self) -> dict:
-        """Define the OAuth request body for the AutomaticTestTap API.
-
-        Returns:
-            A dict with the request body
-        """
-        # TODO: Define the request body needed for the API.
+    def oauth_request_body(self):
         return {
-            "resource": "https://analysis.windows.net/powerbi/api",
-            "scope": self.oauth_scopes,
             "client_id": self.config["client_id"],
-            "username": self.config["username"],
-            "password": self.config["password"],
-            "grant_type": "password",
+            "client_secret": self.config["client_secret"],
+            "grant_type": "client_credentials",
         }
 
     @classmethod
-    def create_for_stream(cls, stream) -> CallMinerAuthenticator:  # noqa: ANN001
-        """Instantiate an authenticator for a specific Singer stream.
+    def create_for_stream(cls, stream: CallMinerStream) -> CallMinerAuthenticator:
+        """Instantiate an authenticator for a CallMiner stream.
 
         Args:
-            stream: The Singer stream instance.
+            stream: The CallMiner stream instance.
 
         Returns:
             A new authenticator.
         """
         return cls(
             stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
+            auth_endpoint=f"https://idp{stream.region.value}.callminer.net/connect/token",
         )

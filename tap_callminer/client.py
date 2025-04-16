@@ -10,12 +10,14 @@ from importlib import resources
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseAPIPaginator  # noqa: TC002
 from singer_sdk.streams import RESTStream
+from typing_extensions import override
 
+from tap_callminer import CallMinerAPIRegion
 from tap_callminer.auth import CallMinerAuthenticator
 
 if t.TYPE_CHECKING:
     import requests
-    from singer_sdk.helpers.types import Auth, Context
+    from singer_sdk.helpers.types import Context
 
 
 # TODO: Delete this is if not using json files for schema definition
@@ -31,19 +33,19 @@ class CallMinerStream(RESTStream):
     # Update this value if necessary or override `get_new_paginator`.
     next_page_token_jsonpath = "$.next_page"  # noqa: S105
 
-    @property
-    def url_base(self) -> str:
-        """Return the API URL root, configurable via tap settings."""
-        # TODO: hardcode a value here, or retrieve it from self.config
-        return "https://api.mysample.com"
-
     @cached_property
-    def authenticator(self) -> Auth:
-        """Return a new authenticator object.
+    def region(self):
+        """Parse API region enum value from config."""
+        return CallMinerAPIRegion[self.config["region"]]
 
-        Returns:
-            An authenticator instance.
-        """
+    @override
+    @cached_property
+    def url_base(self):
+        return f"https://api{self.region.value}.callminer.net/bulkexport/api"
+
+    @override
+    @cached_property
+    def authenticator(self):
         return CallMinerAuthenticator.create_for_stream(self)
 
     @property

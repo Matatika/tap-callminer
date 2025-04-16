@@ -17,27 +17,39 @@ plugins:
     - discover
     - about
     - stream-maps
-
-    # TODO: Declare settings and their types here:
     settings:
-    - name: username
-      label: Username
-      description: The username to use for authentication
-
-    - name: password
-      kind: password
-      label: Password
-      description: The password to use for authentication
+    - name: client_id
+      label: Client ID
+      description: CallMiner bulk export API client ID
+    - name: client_secret
+      label: Client secret
+      description: CallMiner bulk export API client secret
       sensitive: true
+    - name: region
+      label: Region
+      description: CallMiner API region
+      options:
+      - label: United States (Primary)
+        value: US
+      - label: United States (FISMA/HITRUST)
+        value: US_FISMA
+      - label: United Kingdom
+        value: UK
+      - label: Australia
+        value: AU
+      - label: Canada
+        value: CA
+      - label: Europe (EU)
+        value: EU
+      value: US
 
     - name: start_date
       kind: date_iso8601
       label: Start Date
       description: Initial date to start extracting data from
 
-    # TODO: Declare required settings here:
     settings_group_validation:
-    - [username, password]
+    - [client_id, client_secret, region]
 
     # TODO: Declare default configuration values here:
     config:

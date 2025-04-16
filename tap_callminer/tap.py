@@ -6,7 +6,7 @@ from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 # TODO: Import your custom stream types here:
-from tap_callminer import streams
+from tap_callminer import CallMinerAPIRegion, streams
 
 
 class TapCallMiner(Tap):
@@ -14,42 +14,34 @@ class TapCallMiner(Tap):
 
     name = "tap-callminer"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
+            "client_id",
             th.StringType,
             required=True,
-            secret=True,  # Flag config as protected.
-            title="Auth Token",
-            description="The token to authenticate against the API service",
+            title="Client ID",
+            description="CallMiner bulk export API client ID",
         ),
         th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
+            "client_secret",
+            th.StringType,
             required=True,
-            title="Project IDs",
-            description="Project IDs to replicate",
+            secret=True,
+            title="Client secret",
+            description="CallMiner bulk export API client secret",
+        ),
+        th.Property(
+            "region",
+            th.StringType,
+            title="Region",
+            allowed_values=[r.name for r in CallMinerAPIRegion],
+            default=CallMinerAPIRegion.US.name,
+            description="CallMiner API region",
         ),
         th.Property(
             "start_date",
             th.DateTimeType,
             description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            title="API URL",
-            default="https://api.mysample.com",
-            description="The url for the API service",
-        ),
-        th.Property(
-            "user_agent",
-            th.StringType,
-            description=(
-                "A custom User-Agent header to send with each request. Default is "
-                "'<tap_name>/<tap_version>'"
-            ),
         ),
     ).to_dict()
 
