@@ -25,6 +25,9 @@ plugins:
       label: Client secret
       description: CallMiner bulk export API client secret
       sensitive: true
+    - name: notification_email
+      label: Notification email address
+      description: Email address required by CallMiner to send a notification to once an export completes
     - name: region
       label: Region
       description: CallMiner API region
@@ -42,14 +45,13 @@ plugins:
       - label: Europe (EU)
         value: EU
       value: US
-
     - name: start_date
       kind: date_iso8601
       label: Start Date
       description: Initial date to start extracting data from
 
     settings_group_validation:
-    - [client_id, client_secret, region]
+    - [client_id, client_secret, notification_email]
 
   loaders:
   - name: target-jsonl

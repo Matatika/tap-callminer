@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
+from typing_extensions import override
 
-# TODO: Import your custom stream types here:
 from tap_callminer import CallMinerAPIRegion, streams
 
 
@@ -31,6 +33,15 @@ class TapCallMiner(Tap):
             description="CallMiner bulk export API client secret",
         ),
         th.Property(
+            "notification_email",
+            th.EmailType,
+            title="Notification email address",
+            description=(
+                "Email address required by CallMiner to send a notification to once an "
+                "export completes"
+            ),
+        ),
+        th.Property(
             "region",
             th.StringType,
             title="Region",
@@ -46,15 +57,31 @@ class TapCallMiner(Tap):
         ),
     ).to_dict()
 
+    @override
     def discover_streams(self) -> list[streams.CallMinerStream]:
-        """Return a list of discovered streams.
+        data_type_streams: list[streams.DataTypeStream] = [
+            streams.AISummariesStream(self),
+            streams.AlertsStream(self),
+            streams.CategoriesStream(self),
+            streams.CategoryComponentsStream(self),
+            streams.ClientIDsStream(self),
+            streams.CoachInsightsStream(self),
+            streams.CoachWorkflowsStream(self),
+            streams.CommentsStream(self),
+            streams.ContactsStream(self),
+            streams.EmailMetadataStream(self),
+            streams.ScoresStream(self),
+            streams.ScoreIndicatorsStream(self),
+            streams.TagsStream(self),
+            streams.TranscriptsBySpeakerStream(self),
+        ]
 
-        Returns:
-            A list of discovered streams.
-        """
+        export_stream = streams.ExportStream(self)
+        export_stream.data_types = [s.data_type for s in data_type_streams]
+
         return [
-            streams.GroupsStream(self),
-            streams.UsersStream(self),
+            export_stream,
+            *data_type_streams,
         ]
 
 
