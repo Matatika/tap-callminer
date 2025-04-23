@@ -41,6 +41,7 @@ class TapCallMiner(Tap):
         th.Property(
             "start_date",
             th.DateTimeType,
+            default=(datetime.now(tz=timezone.utc) - timedelta(days=365)).isoformat(),
             description="The earliest record date to sync",
         ),
     ).to_dict()
