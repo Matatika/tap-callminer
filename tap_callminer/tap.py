@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
+from singer_sdk.contrib.msgspec import MsgSpecWriter
 from typing_extensions import override
 
 from tap_callminer import CallMinerAPIRegion, streams
@@ -56,6 +57,8 @@ class TapCallMiner(Tap):
             description="The earliest record date to sync",
         ),
     ).to_dict()
+
+    message_writer_class = MsgSpecWriter
 
     @override
     def discover_streams(self) -> list[streams.CallMinerStream]:
