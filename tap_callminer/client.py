@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from functools import cached_property
 
+from singer_sdk.helpers._typing import TypeConformanceLevel
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
@@ -13,6 +14,8 @@ from tap_callminer.auth import CallMinerAuthenticator
 
 class CallMinerStream(RESTStream):
     """CallMiner stream class."""
+
+    TYPE_CONFORMANCE_LEVEL = TypeConformanceLevel.NONE
 
     @cached_property
     def region(self):
