@@ -10,6 +10,7 @@ import math
 import tempfile
 import time
 import zipfile
+from datetime import datetime, timezone
 from functools import cached_property
 from pathlib import Path
 
@@ -58,7 +59,9 @@ class ExportStream(CallMinerStream):
             "DataTypes": self.data_types,
             "Duration": {
                 "TimeFrame": "Custom",
-                "StartDate": self.config["start_date"],
+                "StartDate": (
+                    self.stream_state.get("start_date") or self.config["start_date"]
+                ),
                 "SearchMode": "NewAndUpdated",
             },
             "EmailRecipients": [self.config["notification_email"]],
@@ -152,6 +155,10 @@ class ExportStream(CallMinerStream):
                 zip_path.unlink()
 
                 yield {"tmp_dir": tmpdir, "job_execution_id": job_execution_id}
+
+                self.stream_state["start_date"] = (
+                    datetime.now(tz=timezone.utc).date().isoformat()
+                )
 
         finally:
             self.logger.info("Cleaning up job %s", job_id)
