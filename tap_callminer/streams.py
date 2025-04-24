@@ -6,6 +6,7 @@ import abc
 import csv
 import decimal
 import gzip
+import itertools
 import math
 import tempfile
 import time
@@ -69,13 +70,22 @@ class ExportStream(CallMinerStream):
 
     @override
     def parse_response(self, response):
+        job_poll_max_count: int = self.config["job_poll_max_count"]
+
         job = response.json()
 
         job_id = job["Id"]
         job_execution_id = None
 
         try:
-            while True:
+            for count in itertools.count(1):
+                if count > job_poll_max_count:
+                    msg = (
+                        f"Export job incomplete (polled {job_poll_max_count} time(s) "
+                        "at 60s intervals. `job_poll_max_count` may need adjusting."
+                    )
+                    raise RuntimeError(msg)
+
                 response = self.requests_session.send(
                     self.build_prepared_request(
                         method="GET",
@@ -85,7 +95,6 @@ class ExportStream(CallMinerStream):
                     timeout=self.timeout,
                     allow_redirects=self.allow_redirects,
                 )
-                response.raise_for_status()
 
                 job_execution = next(iter(response.json()), None)
 
@@ -119,7 +128,7 @@ class ExportStream(CallMinerStream):
 
                         break
 
-                self.logger.info("Waiting 60s...")
+                self.logger.info("Waiting 60s... (%d/%d)", count, job_poll_max_count)
                 time.sleep(60)  # poll every minute, following CallMiner best practices
 
             file_size_mb = job_execution["FileSize"] / 1000**2  # convert to MB

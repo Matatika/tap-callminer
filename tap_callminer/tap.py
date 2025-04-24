@@ -58,6 +58,12 @@ class TapCallMiner(Tap):
             ),
             description="The earliest record date to sync",
         ),
+        th.Property(
+            "job_poll_max_count",
+            th.IntegerType(minimum=1),
+            default=60,
+            description="Maximum job poll count",
+        ),
     ).to_dict()
 
     message_writer_class = MsgSpecWriter
