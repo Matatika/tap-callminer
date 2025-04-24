@@ -210,29 +210,19 @@ class DataTypeStream(CallMinerStream):
         for k in row:
             value = row[k]
 
-            if value is None or not (property_schema := properties.get(k)):
+            if value is None or k not in properties:
                 continue
 
-            numeric_typecasts: dict[th._NumericType] = {
-                th.IntegerType: int,
-                th.NumberType: float,
-            }
+            property_type = properties[k]["type"]
 
-            numeric_typecast = next(
-                (
-                    numeric_typecasts[nt]
-                    for nt in numeric_typecasts
-                    if nt.__type_name__ in property_schema["type"]
-                ),
-                None,
-            )  # get the first matching typecast if one exists
-
-            if numeric_typecast:
+            if "integer" in property_type or "number" in property_type:
                 try:
                     d = decimal.Decimal(value)
                 except decimal.DecimalException:
                     d = decimal.Decimal(math.nan)
                     self.logger.debug("Handling invalid decimal '%s' as %s", value, d)
+
+                value = d
 
                 if d.is_nan() or d.is_infinite():
                     value = None
@@ -244,8 +234,6 @@ class DataTypeStream(CallMinerStream):
                         d,
                         value,
                     )
-                else:
-                    value = numeric_typecast(d)
 
             row[k] = value
 
