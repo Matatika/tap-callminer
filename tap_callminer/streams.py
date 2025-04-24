@@ -207,11 +207,18 @@ class DataTypeStream(CallMinerStream):
     def data_type(self) -> str:
         """CallMiner export job data type."""
 
+    @property
+    def filename_data_type(self):
+        """Data type as given in export job file names."""
+        return self.data_type.title()
+
     @override
     def get_records(self, context):
         tmp_dir: str = context["tmp_dir"]
         job_execution_id: str = context["job_execution_id"]
-        filepath = Path(tmp_dir) / f"{job_execution_id}_{self.name.title()}.csv.gz"
+        filepath = (
+            Path(tmp_dir) / f"{job_execution_id}_{self.filename_data_type}.csv.gz"
+        )
 
         with gzip.open(filepath, "r") as f:
             for record in csv.DictReader(line.decode("utf-8-sig") for line in f):
@@ -424,6 +431,7 @@ class CoachWorkflowsStream(DataTypeStream):
 
     primary_keys = ("ContactID", "ID", "Timestamp")
     data_type = "Coach_workflow"
+    filename_data_type = "Coach_Workflows"
 
 
 class CommentsStream(DataTypeStream):
@@ -519,6 +527,70 @@ class EmailMetadataStream(DataTypeStream):
 
     primary_keys = ("ContactID", "StartTime")
     data_type = "Email_metadata"
+
+class _EventsStream(DataTypeStream):
+    primary_keys = ("ContactID", "StartTime", "EndTime")
+    data_type = "Events"
+    additional_properties = ()
+
+    @override
+    @cached_property
+    def schema(self):
+        return th.PropertiesList(
+            th.Property("ContactID", UINT32_TYPE),
+            th.Property("StartTime", th.NumberType),
+            th.Property("EndTime", th.NumberType),
+            th.Property("Duration", th.NumberType),
+            *self.additional_properties,
+        ).to_dict()
+
+
+class EventsDelayStream(_EventsStream):
+    """Define delay events stream."""
+
+    name = "events_delay"
+    filename_data_type = "Events_Delay"
+    additional_properties = (
+        th.Property("Speaker", UINT8_TYPE),
+        th.Property("PreviousSpeaker", UINT8_TYPE),
+    )
+
+
+class EventsMissingRealTimeSegementsStream(_EventsStream):
+    """Define missing real-time segments events stream."""
+
+    name = "events_missing_real_time_segments"
+    filename_data_type = "Events_MissingRealTimeSegements"
+
+
+class EventsOvertalkStream(_EventsStream):
+    """Define overtalk events stream."""
+
+    name = "events_overtalk"
+    filename_data_type = "Events_Overtalk"
+
+
+class EventsRedactionStream(_EventsStream):
+    """Define redaction events stream."""
+
+    name = "events_redaction"
+    filename_data_type = "Events_Redaction"
+    additional_properties = (
+        th.Property("FriendlyName", th.StringType),
+        th.Property("Text", th.StringType),
+        th.Property("EntityType", th.StringType),
+        th.Property("Description", th.StringType),
+        th.Property("RegulatoryCompliance", th.StringType),
+        th.Property("SpeakerID", UINT8_TYPE),
+        th.Property("SpeakerName", th.StringType),
+    )
+
+
+class EventsSilenceStream(_EventsStream):
+    """Define silence events stream."""
+
+    name = "events_silence"
+    filename_data_type = "Events_Silence"
 
 
 class ScoresStream(DataTypeStream):
