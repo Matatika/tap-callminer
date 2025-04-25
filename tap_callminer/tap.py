@@ -93,14 +93,20 @@ class TapCallMiner(Tap):
         ]
 
         export_stream = streams.ExportStream(self)
-        export_stream.data_types = list(
-            dict.fromkeys(
-                s.data_type
-                for s in data_type_streams
-                if not self.catalog
-                or self.catalog.get_stream(s.tap_stream_id).metadata.root.selected
+
+        if not self.catalog:
+            # export all data types
+            export_stream.data_types = [s.data_type for s in data_type_streams]
+        else:
+            # export data types for selected streams only
+            export_stream.data_types = list(
+                dict.fromkeys(
+                    s.data_type
+                    for s in data_type_streams
+                    if (stream_entry := self.catalog.get_stream(s.tap_stream_id))
+                    and stream_entry.metadata.root.selected
+                )
             )
-        )
 
         return [
             export_stream,
