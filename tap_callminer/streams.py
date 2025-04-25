@@ -231,7 +231,7 @@ class DataTypeStream(CallMinerStream):
         properties: dict = self.schema["properties"]
 
         for k in row:
-            value = row[k]
+            value: str = row[k]
 
             if value is None or k not in properties:
                 continue
@@ -257,6 +257,8 @@ class DataTypeStream(CallMinerStream):
                         d,
                         value,
                     )
+            elif "boolean" in property_type:
+                value = value.lower() == "true"
 
             row[k] = value
 
