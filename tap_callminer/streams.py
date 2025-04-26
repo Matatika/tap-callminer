@@ -43,6 +43,9 @@ DOTNET_JSON_SCHEMA_TYPES = {
 DEFAULT_JSON_SCHEMA_TYPE = th.StringType
 
 
+DATE_TIME_FORMAT = r"%m/%d/%Y %H:%M:%S"
+
+
 class ExportStream(CallMinerStream):
     """Define export stream."""
 
@@ -212,6 +215,16 @@ class DataTypeStream(CallMinerStream):
         """Data type as given in export job file names."""
         return self.data_type.title()
 
+    @cached_property
+    def _date_time_properties(self):
+        properties: dict[str, dict] = self.schema["properties"]
+
+        return {
+            name
+            for name, schema in properties.items()
+            if schema.get("format") == th.DateTimeType.string_format
+        }
+
     @override
     def get_records(self, context):
         tmp_dir: str = context["tmp_dir"]
@@ -227,6 +240,16 @@ class DataTypeStream(CallMinerStream):
     @override
     def post_process(self, row, context=None):
         row = super().post_process(row, context=context)
+
+        for p in self._date_time_properties:
+            if not (value := row.get(p)):
+                continue
+
+            row[p] = (
+                datetime.strptime(value, DATE_TIME_FORMAT)
+                .astimezone(timezone.utc)
+                .isoformat()
+            )
 
         properties: dict = self.schema["properties"]
 
