@@ -486,7 +486,7 @@ class ContactsStream(DataTypeStream):
     """Define contacts stream."""
 
     name = "contacts"
-    primary_keys = ("ContactID",)
+    primary_keys = ("ID",)
     data_type = "Contacts"
 
     @override
