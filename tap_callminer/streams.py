@@ -245,6 +245,10 @@ class DataTypeStream(CallMinerStream):
             if not (value := row.get(p)):
                 continue
 
+            if value == "null":
+                row[p] = None
+                continue
+
             row[p] = (
                 datetime.strptime(value, DATE_TIME_FORMAT)
                 .astimezone(timezone.utc)
