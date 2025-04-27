@@ -371,6 +371,7 @@ class CategoryComponentsStream(DataTypeStream):
         th.Property("StartTime", th.NumberType),
         th.Property("EndTime", th.NumberType),
         th.Property("Weight", th.NumberType),
+        th.Property("SimilarityScore", th.NumberType),
     ).to_dict()
 
     primary_keys = ("ContactID", "ComponentID", "CategoryID")
