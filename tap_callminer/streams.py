@@ -546,7 +546,7 @@ class EmailMetadataStream(DataTypeStream):
     schema = th.PropertiesList(
         th.Property("ContactID", UINT32_TYPE),
         th.Property("StartTime", th.NumberType),
-        th.Property("Sent", th.NumberType),
+        th.Property("Sent", th.DateTimeType),
         th.Property("Subject", th.StringType),
         th.Property("From", th.StringType),
         th.Property("To", th.StringType),
