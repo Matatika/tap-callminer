@@ -568,9 +568,9 @@ class _EventsStream(DataTypeStream):
     def schema(self):
         return th.PropertiesList(
             th.Property("ContactID", UINT32_TYPE),
-            th.Property("StartTime", th.NumberType),
-            th.Property("EndTime", th.NumberType),
-            th.Property("Duration", th.NumberType),
+            th.Property("StartTime", th.TimeType),
+            th.Property("EndTime", th.TimeType),
+            th.Property("Duration", th.TimeType),
             *self.additional_properties,
         ).to_dict()
 
