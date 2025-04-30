@@ -53,6 +53,7 @@ class ExportStream(CallMinerStream):
 
     name = "__export__"
     schema = th.ObjectType().to_dict()
+    selected = False
     http_method = "POST"
     path = "/export/job"
 
