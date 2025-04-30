@@ -168,9 +168,7 @@ class ExportStream(CallMinerStream):
 
                 yield {"tmp_dir": tmpdir, "job_execution_id": job_execution_id}
 
-                self.stream_state["start_date"] = (
-                    datetime.now(tz=timezone.utc).date().isoformat()
-                )
+                self.stream_state["start_date"] = job_execution["CreateDate"]
 
         finally:
             self.logger.info("Cleaning up job %s", job_id)
