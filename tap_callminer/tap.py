@@ -66,6 +66,7 @@ class TapCallMiner(Tap):
         ),
     ).to_dict()
 
+    dynamic_catalog = True
     message_writer_class = MsgSpecWriter
 
     @override
