@@ -854,13 +854,12 @@ wheels = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.45.10"
+version = "0.46.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "backoff", marker = "python_full_version < '4'" },
     { name = "backports-datetime-fromisoformat", marker = "python_full_version < '3.11'" },
     { name = "click" },
-    { name = "fs" },
     { name = "fsspec" },
     { name = "importlib-metadata", marker = "python_full_version < '3.12'" },
     { name = "importlib-resources", marker = "python_full_version < '3.10'" },
@@ -873,15 +872,15 @@ dependencies = [
     { name = "pyyaml" },
     { name = "referencing" },
     { name = "requests" },
-    { name = "setuptools" },
     { name = "simpleeval" },
     { name = "simplejson" },
     { name = "sqlalchemy" },
     { name = "typing-extensions" },
+    { name = "universal-pathlib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/a7/46d62a74e12ad17180defd6fdceb77001c8b430ec4eb5357acd56c347c41/singer_sdk-0.45.10.tar.gz", hash = "sha256:fc697badd0c43e0edf59f797bc25e711ab334879c68b235f72fd82dd41f2e724", size = 1424816 }
+sdist = { url = "https://files.pythonhosted.org/packages/a9/23/f7f9c63207ad577ed5ab36e86e8066ee2dd467edea69cfb904776a829374/singer_sdk-0.46.4.tar.gz", hash = "sha256:d3a1044cd48db4d282ef4b41dac27a6cc5ec52a538c8718e4f22f29f9ec79654", size = 1440169 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/bc/fa9853ffd27c6415a3e99e23478c836019247cc748a48d5c6abeefa77bce/singer_sdk-0.45.10-py3-none-any.whl", hash = "sha256:50bf84d3dd01784798c01d24183a1b9979b55c5b40a00da9fa8c905f9e0400cb", size = 190460 },
+    { url = "https://files.pythonhosted.org/packages/83/af/32697fa291d81c41290c33a3ba35dbb581f37fd60cbb72f9378bb84480e7/singer_sdk-0.46.4-py3-none-any.whl", hash = "sha256:389c5933e5eed1816b0e546d8643b56d65ac3eb8e172db828bc1fd8b1caa0554", size = 190180 },
 ]
 
 [package.optional-dependencies]
@@ -984,7 +983,7 @@ test = [
 requires-dist = [
     { name = "fs-s3fs", marker = "extra == 's3'", specifier = "~=1.1.1" },
     { name = "requests", specifier = "~=2.32.3" },
-    { name = "singer-sdk", extras = ["msgspec"], specifier = "~=0.45.10" },
+    { name = "singer-sdk", extras = ["msgspec"], specifier = "~=0.46.4" },
 ]
 
 [package.metadata.requires-dev]
@@ -1045,6 +1044,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/76/ad/cd3e3465232ec2416ae9b983f27b9e94dc8171d56ac99b345319a9475967/typing_extensions-4.13.1.tar.gz", hash = "sha256:98795af00fb9640edec5b8e31fc647597b4691f099ad75f469a2616be1a76dff", size = 106633 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/df/c5/e7a0b0f5ed69f94c8ab7379c599e6036886bffcde609969a5325f47f1332/typing_extensions-4.13.1-py3-none-any.whl", hash = "sha256:4b6cf02909eb5495cfbc3f6e8fd49217e6cc7944e145cdda8caa3734777f9e69", size = 45739 },
+]
+
+[[package]]
+name = "universal-pathlib"
+version = "0.2.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fsspec" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/eb/21/dd871495af3933e585261adce42678dcdf1168c9d6fa0a8f7b6565e54472/universal_pathlib-0.2.6.tar.gz", hash = "sha256:50817aaeaa9f4163cb1e76f5bdf84207fa05ce728b23fd779479b3462e5430ac", size = 175427 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/4d/2e577f6db7aa0f932d19f799c18f604b2b302c65f733419b900ec07dbade/universal_pathlib-0.2.6-py3-none-any.whl", hash = "sha256:700dec2b58ef34b87998513de6d2ae153b22f083197dfafb8544744edabd1b18", size = 50087 },
 ]
 
 [[package]]
