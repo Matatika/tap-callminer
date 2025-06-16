@@ -557,6 +557,7 @@ class EmailMetadataStream(DataTypeStream):
     primary_keys = ("ContactID", "StartTime")
     data_type = "Email_metadata"
 
+
 class _EventsStream(DataTypeStream):
     schema = th.PropertiesList(
         th.Property("ContactID", UINT32_TYPE),
