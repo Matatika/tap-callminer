@@ -233,8 +233,7 @@ class DataTypeStream(CallMinerStream):
         )
 
         with gzip.open(filepath, "r") as f:
-            for record in csv.DictReader(line.decode("utf-8-sig") for line in f):
-                yield self.post_process(record)
+            yield from csv.DictReader(line.decode("utf-8-sig") for line in f)
 
     @override
     def post_process(self, row, context=None):
