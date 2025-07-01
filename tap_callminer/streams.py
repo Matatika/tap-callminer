@@ -49,7 +49,7 @@ DATE_TIME_FORMAT = r"%m/%d/%Y %H:%M:%S"
 class ExportStream(CallMinerStream):
     """Define export stream."""
 
-    data_types: tuple[str] = []
+    data_types: list[str] = []
 
     name = "__export__"
     schema = th.ObjectType().to_dict()
