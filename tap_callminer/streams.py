@@ -20,16 +20,16 @@ from typing_extensions import override
 
 from tap_callminer.client import CallMinerStream
 
-UINT8_TYPE = th.IntegerType(minimum=-(2**7), maximum=2**7 - 1)
-UINT16_TYPE = th.IntegerType(minimum=-(2**15), maximum=2**15 - 1)
-UINT32_TYPE = th.IntegerType(minimum=-(2**31), maximum=2**31 - 1)
+BYTE_TYPE = th.IntegerType(minimum=-(2**7), maximum=2**7 - 1)
+INT16_TYPE = th.IntegerType(minimum=-(2**15), maximum=2**15 - 1)
+INT32_TYPE = th.IntegerType(minimum=-(2**31), maximum=2**31 - 1)
 
 
 DOTNET_JSON_SCHEMA_TYPES = {
     "System.String": th.StringType,
-    "System.Byte": UINT8_TYPE,
-    "System.Int16": UINT16_TYPE,
-    "System.Int32": UINT32_TYPE,
+    "System.Byte": BYTE_TYPE,
+    "System.Int16": INT16_TYPE,
+    "System.Int32": INT32_TYPE,
     "System.Single": th.NumberType,
     "System.Double": th.NumberType,
     "System.Decimal": th.NumberType,
@@ -315,7 +315,7 @@ class AISummariesStream(DataTypeStream):
 
     name = "ai_summaries"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("Summary", th.StringType),
         th.Property("ActionItems", th.StringType),
         th.Property("Reason", th.StringType),
@@ -330,8 +330,8 @@ class AlertsStream(DataTypeStream):
 
     name = "alerts"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("AlertID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("AlertID", INT32_TYPE),
         th.Property("AlertName", th.StringType),
         th.Property("TimeStamp", th.DateTimeType),
     ).to_dict()
@@ -345,11 +345,11 @@ class CategoriesStream(DataTypeStream):
 
     name = "categories"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("CategoryID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("CategoryID", INT32_TYPE),
         th.Property("CategoryFullName", th.StringType),
         th.Property("CategoryName", th.StringType),
-        th.Property("SectionID", UINT32_TYPE),
+        th.Property("SectionID", INT32_TYPE),
         th.Property("SectionName", th.StringType),
     ).to_dict()
 
@@ -362,10 +362,10 @@ class CategoryComponentsStream(DataTypeStream):
 
     name = "category_components"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("ComponentID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("ComponentID", INT32_TYPE),
         th.Property("ComponentName", th.StringType),
-        th.Property("CategoryID", UINT32_TYPE),
+        th.Property("CategoryID", INT32_TYPE),
         th.Property("CategoryFullName", th.StringType),
         th.Property("CategoryDescription", th.StringType),
         th.Property("CategoryName", th.StringType),
@@ -385,7 +385,7 @@ class ClientIDsStream(DataTypeStream):
 
     name = "client_ids"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("ClientID", th.StringType),
         th.Property("ClientCaptureDate", th.DateTimeType),
     ).to_dict()
@@ -399,7 +399,7 @@ class CoachInsightsStream(DataTypeStream):
 
     name = "coach_insights"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("InsightID", th.StringType),
         th.Property("AssignedByUser", th.EmailType),
         th.Property("AssignedBy", th.StringType),
@@ -419,10 +419,10 @@ class CoachInsightsStream(DataTypeStream):
         th.Property("ContactDate", th.DateTimeType),
         th.Property("AgentEmail", th.EmailType),
         th.Property("DisplayDescriptionsInCoach", th.BooleanType),
-        th.Property("SnippetStart", UINT32_TYPE),
-        th.Property("SnippetEnd", UINT32_TYPE),
-        th.Property("ContactLength", UINT32_TYPE),
-        th.Property("ScoreID", UINT16_TYPE),
+        th.Property("SnippetStart", INT32_TYPE),
+        th.Property("SnippetEnd", INT32_TYPE),
+        th.Property("ContactLength", INT32_TYPE),
+        th.Property("ScoreID", INT16_TYPE),
         th.Property("ScoreName", th.StringType),
         th.Property("OriginalScoreValue", th.NumberType),
         th.Property("ScoreValue", th.NumberType),
@@ -446,7 +446,7 @@ class CoachWorkflowsStream(DataTypeStream):
 
     name = "coach_workflows"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("ID", th.StringType),
         th.Property("NewOwner", th.StringType),
         th.Property("NewStatus", th.StringType),
@@ -467,8 +467,8 @@ class CommentsStream(DataTypeStream):
 
     name = "comments"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("CommentID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("CommentID", INT32_TYPE),
         th.Property("Comment", th.StringType),
         th.Property("CreationDate", th.DateTimeType),
         th.Property("Author", th.StringType),
@@ -542,7 +542,7 @@ class EmailMetadataStream(DataTypeStream):
 
     name = "email_metadata"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.NumberType),
         th.Property("Sent", th.DateTimeType),
         th.Property("Subject", th.StringType),
@@ -559,7 +559,7 @@ class EmailMetadataStream(DataTypeStream):
 
 class _EventsStream(DataTypeStream):
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.TimeType),
         th.Property("EndTime", th.TimeType),
         th.Property("Duration", th.TimeType),
@@ -574,12 +574,12 @@ class EventsDelayStream(_EventsStream):
 
     name = "events_delay"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.TimeType),
         th.Property("EndTime", th.TimeType),
         th.Property("Duration", th.TimeType),
-        th.Property("Speaker", UINT8_TYPE),
-        th.Property("PreviousSpeaker", UINT8_TYPE),
+        th.Property("Speaker", BYTE_TYPE),
+        th.Property("PreviousSpeaker", BYTE_TYPE),
     ).to_dict()
 
     filename_data_type = "Events_Delay"
@@ -590,7 +590,7 @@ class EventsMissingRealTimeSegementsStream(_EventsStream):
 
     name = "events_missing_real_time_segments"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.NumberType),
         th.Property("EndTime", th.NumberType),
         th.Property("Duration", th.NumberType),
@@ -604,7 +604,7 @@ class EventsOvertalkStream(_EventsStream):
 
     name = "events_overtalk"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.TimeType),
         th.Property("EndTime", th.TimeType),
         th.Property("Duration", th.TimeType),
@@ -618,7 +618,7 @@ class EventsRedactionStream(_EventsStream):
 
     name = "events_redaction"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("FriendlyName", th.StringType),
         th.Property("Text", th.StringType),
         th.Property("StartTime", th.NumberType),
@@ -627,7 +627,7 @@ class EventsRedactionStream(_EventsStream):
         th.Property("EntityType", th.StringType),
         th.Property("Description", th.StringType),
         th.Property("RegulatoryCompliance", th.StringType),
-        th.Property("SpeakerID", UINT8_TYPE),
+        th.Property("SpeakerID", BYTE_TYPE),
         th.Property("SpeakerName", th.StringType),
     ).to_dict()
 
@@ -639,7 +639,7 @@ class EventsSilenceStream(_EventsStream):
 
     name = "events_silence"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.TimeType),
         th.Property("EndTime", th.TimeType),
         th.Property("Duration", th.TimeType),
@@ -653,8 +653,8 @@ class ScoresStream(DataTypeStream):
 
     name = "scores"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("ScoreID", UINT16_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("ScoreID", INT16_TYPE),
         th.Property("ScoreName", th.StringType),
         th.Property("Score", th.NumberType),
     ).to_dict()
@@ -668,14 +668,14 @@ class ScoreIndicatorsStream(DataTypeStream):
 
     name = "score_indicators"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("ScoreID", UINT16_TYPE),
-        th.Property("ScoreComponentID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("ScoreID", INT16_TYPE),
+        th.Property("ScoreComponentID", INT32_TYPE),
         th.Property("ComponentFullName", th.StringType),
         th.Property("DisplayDescription", th.BooleanType),
         th.Property("CurrentlyActive", th.BooleanType),
-        th.Property("DisplayFormat", UINT8_TYPE),
-        th.Property("DisplayOrder", UINT16_TYPE),
+        th.Property("DisplayFormat", BYTE_TYPE),
+        th.Property("DisplayOrder", INT16_TYPE),
         th.Property("Value", th.NumberType),
     ).to_dict()
 
@@ -688,8 +688,8 @@ class TagsStream(DataTypeStream):
 
     name = "tags"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
-        th.Property("TagID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
+        th.Property("TagID", INT32_TYPE),
         th.Property("TagName", th.StringType),
         th.Property("TagFullName", th.StringType),
     ).to_dict()
@@ -703,9 +703,9 @@ class TranscriptsBySpeakerStream(DataTypeStream):
 
     name = "transcripts_by_speaker"
     schema = th.PropertiesList(
-        th.Property("ContactID", UINT32_TYPE),
+        th.Property("ContactID", INT32_TYPE),
         th.Property("StartTime", th.NumberType),
-        th.Property("SpeakerID", UINT8_TYPE),
+        th.Property("SpeakerID", BYTE_TYPE),
         th.Property("SpeakerName", th.StringType),
         th.Property("Text", th.StringType),
     ).to_dict()
