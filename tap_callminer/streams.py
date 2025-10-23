@@ -67,7 +67,7 @@ class ExportStream(CallMinerStream):
                 "StartDate": (
                     self.stream_state.get("start_date") or self.config["start_date"]
                 ),
-                "SearchMode": "NewAndUpdated",
+                "SearchMode": self.config["search_mode"],
             },
             "EmailRecipients": [self.config["notification_email"]],
         }

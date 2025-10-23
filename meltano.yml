@@ -49,6 +49,19 @@ plugins:
       kind: date_iso8601
       label: Start Date
       description: Initial date to start extracting data from
+    - name: search_mode
+      label: Search Mode
+      description: CallMiner export search mode
+      options:
+      - label: Client Capture Date
+        value: ClientCaptureDate
+      - label: Create Date
+        value: CreateDate
+      - label: Updated
+        value: Updated
+      - label: New and Updated
+        value: NewAndUpdated
+      value: NewAndUpdated
 
     settings_group_validation:
     - [client_id, client_secret, notification_email]
