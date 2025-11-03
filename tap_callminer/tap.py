@@ -9,7 +9,7 @@ from singer_sdk import typing as th  # JSON schema typing helpers
 from singer_sdk.contrib.msgspec import MsgSpecWriter
 from typing_extensions import override
 
-from tap_callminer import CallMinerAPIRegion, streams
+from tap_callminer import CallMinerAPIRegion, CallMinerSearchMode, streams
 
 
 class TapCallMiner(Tap):
@@ -63,6 +63,13 @@ class TapCallMiner(Tap):
             th.IntegerType(minimum=1),
             default=60,
             description="Maximum job poll count",
+        ),
+        th.Property(
+            "search_mode",
+            th.StringType,
+            allowed_values=[m.value for m in CallMinerSearchMode],
+            default=CallMinerSearchMode.NEW_AND_UPDATED.value,
+            description="CallMiner export search mode",
         ),
     ).to_dict()
 

@@ -12,3 +12,12 @@ class CallMinerAPIRegion(str, Enum):
     AU = "aus"  # apiaus.callminer.net, idpaus.callminer.net
     CA = "ca"  # apica.callminer.net, idpca.callminer.net
     EU = "ew"  # apiew.callminer.net, idpew.callminer.net
+
+
+class CallMinerSearchMode(str, Enum):
+    """Enum class representing available CallMiner export search modes."""
+
+    CLIENT_CAPTURE_DATE = "ClientCaptureDate"
+    CREATE_DATE = "CreateDate"
+    UPDATED = "Updated"
+    NEW_AND_UPDATED = "NewAndUpdated"
