@@ -172,30 +172,32 @@ class ExportStream(CallMinerStream):
                 self.stream_state["start_date"] = job_execution["CreateDate"]
 
         finally:
-            self.logger.info("Cleaning up job %s", job_id)
-
-            response = self.requests_session.send(
-                self.build_prepared_request(
-                    method="DELETE",
-                    url=f"{self.url_base}/export/job/{job_id}",
-                ),
-                timeout=self.timeout,
-                allow_redirects=self.allow_redirects,
-            )
-            response.raise_for_status()
+            self._cleanup(f"job {job_id}", f"{self.url_base}/export/job/{job_id}")
 
             if job_execution_id:
-                self.logger.info("Cleaning up job execution %s", job_execution_id)
-
-                response = self.requests_session.send(
-                    self.build_prepared_request(
-                        method="DELETE",
-                        url=f"{self.url_base}/export/history/{job_execution_id}",
-                    ),
-                    timeout=self.timeout,
-                    allow_redirects=self.allow_redirects,
+                self._cleanup(
+                    f"job execution {job_execution_id}",
+                    f"{self.url_base}/export/history/{job_execution_id}",
                 )
-                response.raise_for_status()
+
+    def _cleanup(self, description: str, url: str):
+        """Delete a server-side export resource, best-effort.
+
+        Failures are logged rather than raised. By the time cleanup runs the records
+        have already been emitted, so letting a housekeeping call fail the stream
+        would discard a completed sync - and, raising from a `finally`, would mask
+        whatever genuine error was already on its way out.
+
+        Args:
+            description: Resource description, for logging.
+            url: Resource URL to delete.
+        """
+        self.logger.info("Cleaning up %s", description)
+
+        try:
+            self.send_request(method="DELETE", url=url)
+        except Exception:
+            self.logger.warning("Failed to clean up %s", description, exc_info=True)
 
 
 class DataTypeStream(CallMinerStream):
