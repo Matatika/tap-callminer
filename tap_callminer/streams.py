@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Meltano.
+
 """Stream type classes for tap-callminer."""
 
 from __future__ import annotations
@@ -14,11 +16,15 @@ import zipfile
 from datetime import datetime, timezone
 from functools import cached_property
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from singer_sdk import typing as th
 from typing_extensions import override
 
 from tap_callminer.client import CallMinerStream
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 BYTE_TYPE = th.IntegerType(minimum=-(2**7), maximum=2**7 - 1)
 INT16_TYPE = th.IntegerType(minimum=-(2**15), maximum=2**15 - 1)
@@ -49,7 +55,7 @@ DATE_TIME_FORMAT = r"%m/%d/%Y %H:%M:%S"
 class ExportStream(CallMinerStream):
     """Define export stream."""
 
-    data_types: list[str] = []
+    data_types: Sequence[str] = ()
 
     name = "__export__"
     schema = th.ObjectType().to_dict()

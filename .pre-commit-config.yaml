@@ -26,13 +26,20 @@ repos:
   - id: check-github-workflows
   - id: check-meltano
 
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.6
+  hooks:
+  - id: insert-license
+    files: \.py$
+    args:
+    - --license-filepath=license_header.txt
+    - --use-current-year
+
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.16.1
   hooks:
   - id: ruff-check
-    args: [--diff]
   - id: ruff-format
-    args: [--diff]
 
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v2.3.0
