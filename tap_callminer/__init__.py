@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Meltano.
+
 """Tap for CallMiner."""
 
 from enum import Enum
