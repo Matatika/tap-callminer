@@ -9,7 +9,7 @@ from singer_sdk.testing import get_tap_test_class
 from tap_callminer.tap import TapCallMiner
 
 SAMPLE_CONFIG = {
-    "start_date": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d"),
+    "start_date": dt.datetime.now(dt.timezone.utc).date().isoformat(),
 }
 
 
